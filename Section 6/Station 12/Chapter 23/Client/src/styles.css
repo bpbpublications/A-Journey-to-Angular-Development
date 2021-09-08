@@ -1,0 +1,10 @@
+/* .ng-invalid.ng-touched.ng-dirty{
+  border: 1px solid red;
+} */
+.ng-invalid.ng-touched.ng-dirty:not([ngForm]){
+  border: 1px solid red;
+}
+.active{
+  color: black;
+  background-color: gray;
+}

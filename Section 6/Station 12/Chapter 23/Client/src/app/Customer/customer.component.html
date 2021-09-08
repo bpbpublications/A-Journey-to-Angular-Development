@@ -1,0 +1,8 @@
+<div class="container-fluid pt-3">
+  <customer-list [Customers$]="Customers$" (OnAddNew)="AddNew()"
+  *ngIf="!(IsAddNew$|async);else AddNewContainer">
+    </customer-list>
+  <ng-template #AddNewContainer>
+    <customer-add (OnCancel)="Cancel()" (OnSave)="Save($event)"></customer-add>
+  </ng-template>
+</div>

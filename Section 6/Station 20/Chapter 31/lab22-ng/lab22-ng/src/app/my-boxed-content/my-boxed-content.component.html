@@ -1,0 +1,12 @@
+<!-- <div style="border: 1px solid black;padding: 20px;">
+  <ng-content></ng-content>
+</div> -->
+<div style="border: 1px solid black;padding: 20px;">
+  <h1>
+    <ng-content select="header"></ng-content>
+  </h1>
+  <div style="border:1px dotted ;padding: 10px;">
+    <ng-content select="section"></ng-content>
+  </div>
+  <input type="button" value="ChangeStyle" (click)="ChangeStyle()">
+</div>

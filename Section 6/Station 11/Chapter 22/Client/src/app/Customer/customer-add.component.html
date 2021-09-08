@@ -1,0 +1,34 @@
+<form  class="card" ngForm #myForm="ngForm">
+  <h5 class="card-header">Add New Customer</h5>
+  <div class="card-body">
+    <div class="form-group">
+      <label for="FName">First Name: </label>
+      <input #firstName class="form-control"
+      [ngClass]="{'is-valid':F.valid,'is-invalid':F.invalid}"
+      type="text" name="FName"[(ngModel)]="this.FirstName" required
+      minlength="3" #F="ngModel">
+      <!-- error -->
+      <div class="alert alert-danger" [hidden]="!(F.dirty && F.errors?.required)">
+        Enter First Name
+      </div>
+      <div class="alert alert-danger" [hidden]="!(F.dirty && F.errors?.minlength)">
+        Minimum 3 characters needed for First Name
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="LName">Last Name:</label>
+      <input class="form-control" [ngClass]="{'is-valid':L.valid,'is-invalid':L.invalid}" type="text" name="LName"
+        [(ngModel)]="this.LastName" required minlength="3" #L="ngModel">
+      <!-- error -->
+      <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.required)">
+        Enter Last Name
+      </div>
+      <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.minlength)">
+        Minimum 3 characters needed for Last Name
+      </div>
+    </div>
+    <input type="submit" class="btn btn-success" value="Save"
+    (click)="Save()" [disabled]="myForm.invalid"> &nbsp;
+  <input type="button" class="btn btn-danger" value="Cancel" (click)="Cancel()">
+  </div>
+</form >

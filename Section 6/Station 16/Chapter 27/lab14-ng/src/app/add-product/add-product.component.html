@@ -1,0 +1,503 @@
+<div class="container-fluid pt-3">
+  <form [formGroup]="AddProductForm" (ngSubmit)="save()">
+    <div class="card">
+      <h5 class="card-header">Add Product</h5>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="productCode">Product Code: </label>
+          <input
+            id="productCode"
+            class="form-control"
+            [ngClass]="{
+              'is-valid': isFormControlValid('code'),
+              'is-invalid': isFormControlInValid('code')
+            }"
+            type="text"
+            formControlName="code"
+            placeholder="Product Code"
+            autofocus
+          />
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="
+              !(
+                AddProductForm.controls.code.dirty &&
+                AddProductForm.controls.code.errors?.required
+              )
+            "
+          >
+            Please enter product code.
+          </div>
+
+          <div
+            class="alert alert-danger"
+            [hidden]="
+              !(
+                AddProductForm.controls.code.dirty &&
+                AddProductForm.controls.code.errors?.productCodeNotAvailable
+              )
+            "
+          >
+            Product code already exists.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="productName">Product Name: </label>
+          <input
+            id="productName"
+            class="form-control"
+            [ngClass]="{
+              'is-valid': isFormControlValid('name'),
+              'is-invalid': isFormControlInValid('name')
+            }"
+            type="text"
+            formControlName="name"
+            placeholder="Product Name"
+          />
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="
+              !(
+                AddProductForm.controls.name.dirty &&
+                AddProductForm.controls.name.errors?.required
+              )
+            "
+          >
+            Please enter product name.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="selectBrand">Brand Name: </label>
+          <select
+            id="selectBrand"
+            class="form-control custom-select"
+            [ngClass]="{
+              'is-valid': isFormControlValid('brand'),
+              'is-invalid': isFormControlInValid('brand')
+            }"
+            formControlName="brand"
+          >
+            <option [selected]="true" value>--Select Brand--</option>
+            <option [value]="brand.Id" *ngFor="let brand of Brands">{{
+              brand.Value
+            }}</option>
+          </select>
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="
+              !(
+                AddProductForm.controls.brand.dirty &&
+                AddProductForm.controls.brand.errors?.required
+              )
+            "
+          >
+            Please select brand name.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="selectCategory">Category: </label>
+          <select
+            id="selectCategory"
+            class="form-control custom-select"
+            [ngClass]="{
+              'is-valid': isFormControlValid('category'),
+              'is-invalid': isFormControlInValid('category')
+            }"
+            formControlName="category"
+            multiple
+          >
+            <option [value]="category.Id" *ngFor="let category of Categories">{{
+              category.Value
+            }}</option>
+          </select>
+
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="
+              !(
+                AddProductForm.controls.category.dirty &&
+                AddProductForm.controls.category.errors?.required
+              )
+            "
+          >
+            Please select category.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="selectManufacturingDate">Manufacturing Date: </label>
+          <input
+            id="selectManufacturingDate"
+            class="form-control"
+            [ngClass]="{
+              'is-valid': isFormControlValid('manufacturingDate'),
+              'is-invalid': isFormControlInValid('manufacturingDate')
+            }"
+            type="date"
+            formControlName="manufacturingDate"
+          />
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="
+              !(
+                AddProductForm.controls.manufacturingDate.dirty &&
+                AddProductForm.controls.manufacturingDate.errors?.required
+              )
+            "
+          >
+            Please select manufacturing date.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Product Type: </label>
+          <div>
+            <div class="form-check form-check-inline">
+              <input
+                id="old"
+                class="form-check-input"
+                name="type"
+                type="radio"
+                value="1"
+                formControlName="type"
+              />
+              <label class="form-check-label" for="old">Old</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                id="new"
+                class="form-check-input"
+                name="type"
+                type="radio"
+                value="2"
+                formControlName="type"
+              />
+              <label class="form-check-label" for="new">New</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                id="refurbished"
+                class="form-check-input"
+                name="type"
+                type="radio"
+                value="3"
+                formControlName="type"
+              />
+              <label class="form-check-label" for="refurbished"
+                >Refurbished</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-group">
+            <div class="form-check">
+              <input
+                id="checkBoxreadyForSale"
+                class="form-check-input"
+                type="checkbox"
+                formControlName="readyForSale"
+              />
+              <label class="form-check-label" for="checkBoxreadyForSale">
+                Ready for Sale
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            class="btn btn-primary fas fa-coffee fa-xs"
+            (click)="addSpecification()"
+            type="button"
+            value="+ Product Specification"
+          />
+
+          <div
+            class="alert alert-danger w-50 mt-2"
+            [hidden]="!ShowSpecificationErrorMessage"
+          >
+            Please add the specifications fields.
+          </div>
+        </div>
+
+        <div class="form-group" formArrayName="specifications">
+          <ng-container
+            *ngFor="
+              let item of getSpecificationFormArray.controls;
+              let i = index
+            "
+          >
+            <ng-container [formGroupName]="i">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <input
+                    class="form-control"
+                    type="text"
+                    formControlName="description"
+                    placeholder="Description"
+                  />
+                </div>
+                <div class="form-group col-md-4">
+                  <input
+                    class="form-control"
+                    type="text"
+                    formControlName="value"
+                    placeholder="Value"
+                  />
+                </div>
+
+                <div class="form-group col-md-2">
+                  <i
+                    class="fa fa-trash pointer text-center"
+                    (click)="deleteSpecification(i)"
+                    aria-hidden="true"
+                  ></i>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="card" formGroupName="manufacturingAddress">
+          <div class="card-body">
+            <h5 class="card-title">Manufacturing Details</h5>
+            <div class="form-group">
+              <label for="selectCountry">Country : </label>
+              <select
+                id="selectCountry"
+                class="form-control custom-select"
+                [ngClass]="{
+                  'is-valid': isFormControlValid(
+                    'manufacturingAddress.country'
+                  ),
+                  'is-invalid': isFormControlInValid(
+                    'manufacturingAddress.country'
+                  )
+                }"
+                formControlName="country"
+              >
+                <option [selected]="true" value>--Select Country--</option>
+                <option
+                  [value]="country.Id"
+                  *ngFor="let country of Countries"
+                  >{{ country.Value }}</option
+                >
+              </select>
+
+              <!-- error -->
+              <div
+                class="alert alert-danger"
+                [hidden]="
+                  !(
+                    AddProductForm.controls.manufacturingAddress.get('country')
+                      .dirty &&
+                    AddProductForm.controls.manufacturingAddress.get('country')
+                      .errors?.required
+                  )
+                "
+              >
+                Please select country.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="selectState">State : </label>
+              <select
+                id="selectState"
+                class="form-control custom-select"
+                [ngClass]="{
+                  'is-valid': isFormControlValid('manufacturingAddress.state'),
+                  'is-invalid': isFormControlInValid(
+                    'manufacturingAddress.state'
+                  )
+                }"
+                formControlName="state"
+              >
+                <option [selected]="true" value>--Select State--</option>
+                <option [value]="state.Id" *ngFor="let state of States">{{
+                  state.Value
+                }}</option>
+              </select>
+
+              <!-- error -->
+              <div
+                class="alert alert-danger"
+                [hidden]="
+                  !(
+                    AddProductForm.controls.manufacturingAddress.get('state')
+                      .dirty &&
+                    AddProductForm.controls.manufacturingAddress.get('state')
+                      .errors?.required
+                  )
+                "
+              >
+                Please select state.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="selectCity">City : </label>
+              <select
+                id="selectCity"
+                class="form-control custom-select"
+                [ngClass]="{
+                  'is-valid': isFormControlValid('manufacturingAddress.city'),
+                  'is-invalid': isFormControlInValid(
+                    'manufacturingAddress.city'
+                  )
+                }"
+                formControlName="city"
+              >
+                <option [selected]="true" value>--Select City--</option>
+                <option [value]="city.Id" *ngFor="let city of Cities">{{
+                  city.Value
+                }}</option>
+              </select>
+
+              <!-- error -->
+              <div
+                class="alert alert-danger"
+                [hidden]="
+                  !(
+                    AddProductForm.controls.manufacturingAddress.get('city')
+                      .dirty &&
+                    AddProductForm.controls.manufacturingAddress.get('city')
+                      .errors?.required
+                  )
+                "
+              >
+                Please select city.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fulladdress">Full Address: </label>
+              <textarea
+                id="fulladdress"
+                class="form-control"
+                [ngClass]="{
+                  'is-valid': isFormControlValid(
+                    'manufacturingAddress.fullAddress'
+                  ),
+                  'is-invalid': isFormControlInValid(
+                    'manufacturingAddress.fullAddress'
+                  )
+                }"
+                formControlName="fullAddress"
+                rows="6"
+              ></textarea>
+
+              <!-- error -->
+              <div
+                class="alert alert-danger"
+                [hidden]="
+                  !(
+                    AddProductForm.controls.manufacturingAddress.get(
+                      'fullAddress'
+                    ).dirty &&
+                    AddProductForm.controls.manufacturingAddress.get(
+                      'fullAddress'
+                    ).errors?.required
+                  )
+                "
+              >
+                Please enter full address.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="emailAddress">Email Address: </label>
+              <input
+                id="emailAddress"
+                class="form-control"
+                [ngClass]="{
+                  'is-valid': isFormControlValid(
+                    'manufacturingAddress.emailAddress'
+                  ),
+                  'is-invalid': isFormControlInValid(
+                    'manufacturingAddress.emailAddress'
+                  )
+                }"
+                type="text"
+                formControlName="emailAddress"
+                placeholder="Email Address"
+                autofocus
+              />
+              <!-- error -->
+              <div
+                class="alert alert-danger"
+                [hidden]="
+                  !(
+                    AddProductForm.controls.manufacturingAddress.get(
+                      'emailAddress'
+                    ).dirty &&
+                    AddProductForm.controls.manufacturingAddress.get(
+                      'emailAddress'
+                    ).errors?.required
+                  )
+                "
+              >
+                Please enter email address.
+              </div>
+
+              <div
+                class="alert alert-danger"
+                [hidden]="
+                  !(
+                    AddProductForm.controls.manufacturingAddress.get(
+                      'emailAddress'
+                    ).dirty &&
+                    AddProductForm.controls.manufacturingAddress.get(
+                      'emailAddress'
+                    ).errors?.pattern
+                  )
+                "
+              >
+                Please enter valid email address.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <app-image-upload
+          [ShowDottedRedBorder]="isFormControlInValid('image')"
+          formControlName="image"
+        ></app-image-upload>
+      </div>
+      <div
+      class="alert alert-danger image-error"
+      [hidden]="
+        !(AddProductForm.controls.image.dirty && AddProductForm.controls.image.errors?.required
+        )
+      "
+    >
+      Please select product image.
+    </div>
+      <div class="form-group text-right pr-5 mt-5">
+        <div>
+          <input class="btn btn-success btn-lg" type="submit" value="Save" />
+          &nbsp;
+          <input
+            class="btn btn-danger btn-lg"
+            (click)="reset()"
+            type="button"
+            value="Reset"
+          />
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

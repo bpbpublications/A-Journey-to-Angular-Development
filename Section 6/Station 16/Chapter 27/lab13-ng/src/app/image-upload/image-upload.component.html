@@ -1,0 +1,7 @@
+<div
+[ngStyle]="{'border':ShowDottedRedBorder ? '2px dashed red': '1px dashed #7c7db3' }"
+class="image-drop-area">
+  <span class="choose-btn btn-primary">Choose file</span>
+  <span class="img-msg">{{file ? file.name : 'or drag and drop file here' }}</span>
+  <input class="file-input" type="file">
+</div>

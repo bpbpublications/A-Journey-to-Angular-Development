@@ -1,0 +1,12 @@
+@import "mystyle.css";
+/* @import "color.css"; */
+
+.MyClass1{
+  border:1px solid black;
+}
+
+
+.DivContainer {
+  border:1px solid black;
+  margin: 5px;
+}

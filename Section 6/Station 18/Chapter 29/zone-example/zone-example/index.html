@@ -1,0 +1,123 @@
+<html>
+
+<head>
+    <title>Hello world</title>
+    <script src="node_modules/zone.js/bundles/zone.umd.js"></script>
+</head>
+
+<body>
+    <input type="button" value="Handle click" id="MyButton">
+    <script>
+
+        // function patchTimeout(...arg) {
+        //     console.log('Before Orginzal SetTimeOut invoked ' + Zone.current.MyName);
+        //     OriginalTimeout(...arg);
+        //     console.log('After Orginzal SetTimeOut invoked ' + Zone.current.MyName);
+        // }
+        // const OriginalTimeout = window.setTimeout;
+        // window.setTimeout = patchTimeout;
+
+        // let Name="Outside function";
+        // function MyFunction(){
+        //     Name="Inside function";
+        //     console.log('Function called: '+Name);
+        //     setTimeout(OnTimeout, 3000);
+        // }
+        // function OnTimeout(){
+        //     console.log('In the setTimeout callback: ' + Name);
+        // }
+        // console.log('Before function call: ' + Name);
+        // MyFunction();
+        // Name="Outside function"
+        // console.log('After function call: ' + Name);
+
+
+        // Zone.current.Name="Outside function";
+        // function MyFunction(){
+        //     Zone.current.Name="Inside function";
+        //     console.log('Function called: '+Zone.current.Name);
+        //     setTimeout(OnTimeout, 3000);
+        // }
+        // function OnTimeout(){
+        //     console.log('In the setTimeout callback: ' + Zone.current.Name);
+        // }
+        // console.log('Before function call: ' + Zone.current.Name);
+        // Zone.current.fork({}).run(MyFunction);
+        // Zone.current.Name="Outside function"
+        // console.log('After function call: ' + Zone.current.Name);
+
+        // function patchTimeout(...arg) {
+        //     console.log('Before Orginzal SetTimeOut invoked ' + Zone.current.MyName);
+        //     OriginalTimeout(...arg);
+        //     console.log('After Orginzal SetTimeOut invoked ' + Zone.current.MyName);
+        // }
+        // const OriginalTimeout = window.setTimeout;
+        // window.setTimeout = patchTimeout;
+
+        Zone.current.MyName = "B";
+        Zone.current.fork({
+            onInvokeTask: (parent, current, target, task) => {
+                console.log("Task invoked");
+                parent.invokeTask(target, task);
+            },
+            onHasTask: (parent, current, target, hasTask) => {
+                if (!hasTask.macroTask) {
+                    console.log("Task ended");
+                }
+            }
+        }).fork({}).run(function () {
+            Zone.current.MyName = "A";
+            setTimeout(A, 3000);
+            setTimeout(OnTimeout, 3000);
+        });
+
+        function A() {
+            console.log('In the setTimeout callback2: ' + Zone.current.MyName);
+        }
+        function OnTimeout() {
+            console.log('In the setTimeout callback: ' + Zone.current.MyName);
+        }
+        console.log('Outside the zone: ' + Zone.current.MyName);
+
+
+
+
+        // const OriginalTimeout = EventTarget.prototype.addEventListener;
+        // EventTarget.prototype.addEventListener = function(eventName,callback){
+        //     OriginalTimeout(eventName,function(){
+        //         console.log("Before Custom Code")
+        //         callback();
+        //         console.log("Aftre Custom Code")
+        //     })
+        // };
+        // document.getElementById("MyButton").addEventListener('click',function(){
+        //     console.log("Inside button click")
+        // });
+
+
+
+
+    //     const OriginalTimeout = EventTarget.prototype.addEventListener;
+    //     EventTarget.prototype.addEventListener = function(eventName,callback){
+    //         OriginalTimeout(eventName,function(){
+    //             console.log("Before Custom Code")
+    //             callback();
+    //             console.log("Aftre Custom Code")
+    //         })
+    //     };
+    //     Zone.current.Name="Outside zone";
+    //     Zone.current.fork({  onHandleError: function(parentZoneDelegate, currentZone, targetZone, error) {
+    //     console.log("Error handled by zone: " + error);
+    // }}).run(function () {
+    //         Zone.current.Name="Inside zone";;
+    //         console.log(' Zone: ' + Zone.current.Name);
+    //         document.getElementById("MyButton").addEventListener('click',HandleClick);
+    //     });
+    //     Zone.current.Name="Outside zone";
+    //     function HandleClick(){
+    //         console.log(' Zone: ' + Zone.current.Name);
+    //     }
+    </script>
+</body>
+
+</html>

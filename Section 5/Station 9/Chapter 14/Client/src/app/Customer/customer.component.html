@@ -1,0 +1,68 @@
+<nav class="navbar navbar-dark bg-dark justify-content-end">
+  <span class="navbar-brand mb-0 h1">Welcome {{LoginUserFirstName}},</span>
+<a class="navbar-brand mb-0 h1 underline "
+    href='/login' (click)="logout()"><u>Logout</u></a>
+</nav>
+
+<div class="container-fluid pt-3">
+  <div class="card" [hidden]="IsAddNew">
+    <h5 class="card-header">Customer List</h5>
+    <div class="card-body">
+      <div class="card-title">
+        <i class="fas fa-user-plus"></i>
+        <input type="button" value="+ Add New" class="btn btn-primary fas fa-coffee fa-xs" (click)="AddNew()">
+      </div>
+      <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of Customers">
+            <td scope="row">{{item.FName}}</td>
+            <td>{{item.LName}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card" [hidden]="!IsAddNew" ngForm #myForm="ngForm">
+    <h5 class="card-header">Add New Customer</h5>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="FName">First Name: </label>
+        <input class="form-control"
+        [ngClass]="{'is-valid':F.valid,'is-invalid':F.invalid}" type="text" name="FName"
+        [(ngModel)]="this.FirstName" required minlength="3" #F="ngModel">
+
+
+        <!-- error -->
+        <div class="alert alert-danger" [hidden]="!(F.dirty && F.errors?.required)">
+          Enter First Name
+        </div>
+        <div class="alert alert-danger" [hidden]="!(F.dirty && F.errors?.minlength)">
+          Minimum 3 characters needed for First Name
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="LName">Last Name:</label>
+        <input class="form-control"
+        [ngClass]="{'is-valid':L.valid,'is-invalid':L.invalid}"
+        type="text" name="LName" [(ngModel)]="this.LastName" required minlength="3"
+          #L="ngModel">
+
+        <!-- error -->
+        <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.required)">
+          Enter Last Name
+        </div>
+        <div class="alert alert-danger" [hidden]="!(L.dirty && L.errors?.minlength)">
+          Minimum 3 characters needed for Last Name
+        </div>
+      </div>
+      <input type="button" class="btn btn-success" value="Save" (click)="Save()" [disabled]="myForm.invalid"> &nbsp;
+      <input type="button" class="btn btn-danger" value="Cancel" (click)="Cancel()">
+    </div>
+  </div>
+</div>

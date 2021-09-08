@@ -1,0 +1,497 @@
+<div class="container-fluid pt-3">
+  <form name="form" (ngSubmit)="save()" #AddProductForm="ngForm" novalidate>
+    <div class="card">
+      <h5 class="card-header">Add Product</h5>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="productCode">Product Code: </label>
+          <input
+            id="productCode"
+            class="form-control"
+            name="code"
+            [(ngModel)]="addProduct.productCode"
+            [ngClass]="{
+              'is-valid':
+                ProductCode.touched && ProductCode.dirty && ProductCode.valid,
+              'is-invalid':
+                ProductCode.touched && ProductCode.dirty && ProductCode.invalid
+            }"
+            type="text"
+            placeholder="Product Code"
+            autofocus
+            required
+            uniqueProductCodeValidator
+            #ProductCode="ngModel"
+          />
+
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="!(ProductCode.dirty && ProductCode.errors?.required)"
+          >
+            Please enter product code.
+          </div>
+
+          <div
+            class="alert alert-danger"
+            [hidden]="
+              !(
+                ProductCode.dirty && ProductCode.errors?.productCodeNotAvailable
+              )
+            "
+          >
+            Product code already exists.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="productName">Product Name: </label>
+          <input
+            id="productName"
+            class="form-control"
+            name="name"
+            [(ngModel)]="addProduct.productName"
+            [ngClass]="{
+              'is-valid':
+                ProductName.touched && ProductName.dirty && ProductName.valid,
+              'is-invalid':
+                ProductName.touched && ProductName.dirty && ProductName.invalid
+            }"
+            type="text"
+            placeholder="Product Name"
+            required
+            #ProductName="ngModel"
+          />
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="!(ProductName.dirty && ProductName.errors?.required)"
+          >
+            Please enter product name.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="selectBrand">Brand Name: </label>
+          <select
+            id="selectBrand"
+            class="form-control custom-select"
+            name="brand"
+            [(ngModel)]="addProduct.brand"
+            [ngClass]="{
+              'is-valid': Brand.touched && Brand.dirty && Brand.valid,
+              'is-invalid': Brand.touched && Brand.dirty && Brand.invalid
+            }"
+            required
+            #Brand="ngModel"
+          >
+            <option [selected]="true" value>--Select Brand--</option>
+            <option [value]="brand.Id" *ngFor="let brand of Brands">
+              {{ brand.Value }}
+            </option>
+          </select>
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="!(Brand.dirty && Brand.errors?.required)"
+          >
+            Please select brand name.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="selectCategory">Category: </label>
+          <select
+            id="selectCategory"
+            class="form-control custom-select"
+            name="category"
+            [(ngModel)]="addProduct.categories"
+            [ngClass]="{
+              'is-valid': category.touched && category.dirty && category.valid,
+              'is-invalid':
+                category.touched && category.dirty && category.invalid
+            }"
+            multiple
+            required
+            #category="ngModel"
+          >
+            <option [value]="category.Id" *ngFor="let category of Categories">
+              {{ category.Value }}
+            </option>
+          </select>
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="!(category.dirty && category.errors?.required)"
+          >
+            Please select category.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="selectManufacturingDate">Manufacturing Date: </label>
+
+          <input
+            id="selectManufacturingDate"
+            class="form-control"
+            name="manufacturingDate"
+            [(ngModel)]="addProduct.manufacturingDate"
+            [ngClass]="{
+              'is-valid':
+                manufacturingDate.touched &&
+                manufacturingDate.dirty &&
+                manufacturingDate.valid,
+              'is-invalid':
+                manufacturingDate.touched &&
+                manufacturingDate.dirty &&
+                manufacturingDate.invalid
+            }"
+            type="date"
+            required
+            #manufacturingDate="ngModel"
+          />
+          <!-- error -->
+          <div
+            class="alert alert-danger"
+            [hidden]="
+              !(manufacturingDate.dirty && manufacturingDate.errors?.required)
+            "
+          >
+            Please select manufacturing date.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Product Type: </label>
+          <div>
+            <div class="form-check form-check-inline">
+              <input
+                id="old"
+                class="form-check-input"
+                name="productType"
+                type="radio"
+                value="1"
+                [(ngModel)]="addProduct.productType"
+              />
+              <label class="form-check-label" for="old">Old</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                id="new"
+                class="form-check-input"
+                name="productType"
+                type="radio"
+                value="2"
+                [(ngModel)]="addProduct.productType"
+              />
+              <label class="form-check-label" for="new">New</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                id="refurbished"
+                class="form-check-input"
+                name="productType"
+                type="radio"
+                value="3"
+                [(ngModel)]="addProduct.productType"
+              />
+              <label class="form-check-label" for="refurbished"
+                >Refurbished</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-group">
+            <div class="form-check">
+              <input
+                id="checkBoxreadyForSale"
+                class="form-check-input"
+                name="readyForSale"
+                type="checkbox"
+                [(ngModel)]="addProduct.readyForSale"
+              />
+              <label class="form-check-label" for="checkBoxreadyForSale">
+                Ready for Sale
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            class="btn btn-primary fas fa-coffee fa-xs"
+            (click)="addSpecification()"
+            type="button"
+            value="+ Product Specification"
+          />
+        </div>
+
+        <div class="form-group" ngModelGroup="Specifications">
+          <div
+            class="form-row"
+            *ngFor="let item of addProduct.specifications; let i = index"
+            ngModelGroup="{{ i }}"
+          >
+            <div class="form-group col-md-6">
+              <input
+                class="form-control"
+                name="description"
+                type="text"
+                placeholder="Description"
+                [(ngModel)]="item.description"
+                [ngClass]="{
+                  'is-valid':
+                    description.touched &&
+                    description.dirty &&
+                    description.valid,
+                  'is-invalid':
+                    description.touched &&
+                    description.dirty &&
+                    description.invalid
+                }"
+                required
+                #description="ngModel"
+              />
+            </div>
+            <div class="form-group col-md-4">
+              <input
+                class="form-control"
+                name="value"
+                type="text"
+                placeholder="Value"
+                [(ngModel)]="item.value"
+                [ngClass]="{
+                  'is-valid': value.touched && value.dirty && value.valid,
+                  'is-invalid': value.touched && value.dirty && value.invalid
+                }"
+                required
+                #value="ngModel"
+              />
+            </div>
+
+            <div class="form-group col-md-2">
+              <i
+                class="fa fa-trash pointer text-center"
+                (click)="deleteSpecification(i)"
+                aria-hidden="true"
+              ></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="card">
+            <div class="card-body" ngModelGroup="manufacturingAddress">
+              <h5 class="card-title">Manufacturing Address</h5>
+              <div class="form-group">
+                <label for="selectCountry">Country : </label>
+                <select
+                  id="selectCountry"
+                  class="form-control custom-select"
+                  name="country"
+                  [ngClass]="{
+                    'is-valid':
+                      country.touched && country.dirty && country.valid,
+                    'is-invalid':
+                      country.touched && country.dirty && country.invalid
+                  }"
+                  (change)="onCountryDropDownChange()"
+                  [(ngModel)]="addProduct.manufacturingAddress.country"
+                  required
+                  #country="ngModel"
+                >
+                  <option [selected]="true" value>--Select Country--</option>
+                  <option
+                    [value]="country.Id"
+                    *ngFor="let country of Countries"
+                  >
+                    {{ country.Value }}
+                  </option>
+                </select>
+
+                <!-- error -->
+                <div
+                  class="alert alert-danger"
+                  [hidden]="!(country.dirty && country.errors?.required)"
+                >
+                  Please select country.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="selectState">State : </label>
+                <select
+                  id="selectState"
+                  class="form-control custom-select"
+                  name="state"
+                  [ngClass]="{
+                    'is-valid': state.touched && state.dirty && state.valid,
+                    'is-invalid': state.touched && state.dirty && state.invalid
+                  }"
+                  (change)="onStateDropDownChange()"
+                  [(ngModel)]="addProduct.manufacturingAddress.state"
+                  required
+                  #state="ngModel"
+                >
+                  <option [selected]="true" value>--Select State--</option>
+                  <option [value]="state.Id" *ngFor="let state of States">
+                    {{ state.Value }}
+                  </option>
+                </select>
+
+                <!-- error -->
+                <div
+                  class="alert alert-danger"
+                  [hidden]="!(state.dirty && state.errors?.required)"
+                >
+                  Please select state.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="selectCity">City : </label>
+                <select
+                  id="selectCity"
+                  class="form-control custom-select"
+                  name="city"
+                  [ngClass]="{
+                    'is-valid': city.touched && city.dirty && city.valid,
+                    'is-invalid': city.touched && city.dirty && city.invalid
+                  }"
+                  [(ngModel)]="addProduct.manufacturingAddress.city"
+                  required
+                  #city="ngModel"
+                >
+                  <option [selected]="true" value>--Select City--</option>
+                  <option [value]="city.Id" *ngFor="let city of Cities">
+                    {{ city.Value }}
+                  </option>
+                </select>
+
+                <!-- error -->
+                <div
+                  class="alert alert-danger"
+                  [hidden]="!(city.dirty && city.errors?.required)"
+                >
+                  Please select city.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="fulladdress">Full Address: </label>
+                <textarea
+                  id="fulladdress"
+                  class="form-control"
+                  name="fullAddress"
+                  [ngClass]="{
+                    'is-valid':
+                      fullAddress.touched &&
+                      fullAddress.dirty &&
+                      fullAddress.valid,
+                    'is-invalid':
+                      fullAddress.touched &&
+                      fullAddress.dirty &&
+                      fullAddress.invalid
+                  }"
+                  [(ngModel)]="addProduct.manufacturingAddress.fullAddress"
+                  required
+                  #fullAddress="ngModel"
+                  rows="6"
+                ></textarea>
+
+                <!-- error -->
+                <div
+                  class="alert alert-danger"
+                  [hidden]="
+                    !(fullAddress.dirty && fullAddress.errors?.required)
+                  "
+                >
+                  Please enter full address.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="emailAddress">Email Address: </label>
+
+                <input
+                  id="emailAddress"
+                  class="form-control"
+                  name="emailAddress"
+                  [ngClass]="{
+                    'is-valid':
+                      emailAddress.touched &&
+                      emailAddress.dirty &&
+                      emailAddress.valid,
+                    'is-invalid':
+                      emailAddress.touched &&
+                      emailAddress.dirty &&
+                      emailAddress.invalid
+                  }"
+                  type="text"
+                  [(ngModel)]="addProduct.manufacturingAddress.emailAddress"
+                  placeholder="Email Address"
+                  required
+                  #emailAddress="ngModel"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                />
+                <!-- error -->
+                <div
+                  class="alert alert-danger"
+                  [hidden]="
+                    !(emailAddress.dirty && emailAddress.errors?.required)
+                  "
+                >
+                  Please enter email address.
+                </div>
+                <div
+                  class="alert alert-danger"
+                  [hidden]="
+                    !(emailAddress.dirty && emailAddress.errors?.pattern)
+                  "
+                >
+                  Please enter valid email address.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <app-image-upload
+            name="image"
+            [ngClass]="{
+              'is-valid': image.touched && image.dirty && image.valid,
+              'is-invalid': image.touched && image.dirty && image.invalid
+            }"
+            [ShowDottedRedBorder]="
+              image.touched && image.dirty && image.invalid
+            "
+            [(ngModel)]="addProduct.image"
+            required
+            #image="ngModel"
+          ></app-image-upload>
+        </div>
+        <div
+          class="alert alert-danger image-error mx-auto"
+          [hidden]="!(image.dirty && image.errors?.required)"
+        >
+          Please select product image.
+        </div>
+      </div>
+
+      <div class="form-group text-right pr-5 mt-5">
+        <div>
+          <input class="btn btn-success btn-lg" type="submit" value="Save" />
+          &nbsp;
+          <input
+            class="btn btn-danger btn-lg"
+            (click)="reset()"
+            type="button"
+            value="Reset"
+          />
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

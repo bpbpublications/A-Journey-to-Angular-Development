@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script  src="./node_modules/classlist.js/classList.js"></script>
+    <style>
+        .mystyle {
+            width: 300px;
+            height: 50px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="addStyle()">Add Style</button>
+    <div id="myDIV">
+        I am a DIV element
+    </div>
+    <script >
+        
+        function addStyle() {
+
+            document.getElementById("myDIV").classList.add("mystyle");
+        }
+    </script>
+</body>
+</html>

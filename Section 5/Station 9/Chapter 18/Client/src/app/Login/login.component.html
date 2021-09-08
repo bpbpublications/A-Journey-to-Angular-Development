@@ -1,0 +1,43 @@
+<!-- login.component.html -->
+<div class="container-fluid pt-3">
+  <div class="card">
+    <h5 class="card-header">Login</h5>
+    <div class="card-body" [formGroup]="loginForm">
+      <div class="form-group">
+        <!-- <div class="alert alert-danger" *ngIf="IsAuthenticatiionFailed" >
+          Invalid User Name or Password
+        </div> -->
+        <div class="alert alert-danger" *ngIf="IsAuthenticatiionFailed$|async">
+          Invalid User Name or Password
+        </div>
+        <label for="UserName">User Name: </label>
+        <input class="form-control"
+          [ngClass]="{'is-valid':loginForm.controls.UserName.valid,'is-invalid':loginForm.controls.UserName.invalid}"
+          formControlName="UserName" type="text" name="UserName">
+        <div class="alert alert-danger"
+          [hidden]="!(loginForm.controls.UserName.dirty && loginForm.controls.UserName.errors?.required)">
+          Enter User Name
+        </div>
+        <div class="alert alert-danger"
+          [hidden]="!(loginForm.controls.UserName.dirty && loginForm.controls.UserName.errors?.minlength)">
+          Minimum 6 characters needed for User Name
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="Password">Password:</label>
+        <input class="form-control"
+          [ngClass]="{'is-valid':loginForm.controls.Password.valid,'is-invalid':loginForm.controls.Password.invalid}"
+          formControlName="Password" type="password" name="Password">
+        <div class="alert alert-danger"
+          [hidden]="!(loginForm.controls.Password.dirty && loginForm.controls.Password.errors?.required)">
+          Enter Password
+        </div>
+        <div class="alert alert-danger"
+          [hidden]="!(loginForm.controls.Password.dirty && loginForm.controls.Password.errors?.minlength)">
+          Minimum 6 characters needed for Password
+        </div>
+      </div>
+      <input type="button" class="btn btn-success" value="Login" (click)="login()" [disabled]="loginForm.invalid">
+    </div>
+  </div>
+</div>

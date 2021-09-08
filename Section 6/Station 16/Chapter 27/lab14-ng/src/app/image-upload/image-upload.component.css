@@ -1,0 +1,50 @@
+.image-drop-area {
+	border: 1px dashed #7c7db3;
+	border-radius: 3px;
+	position: relative;
+	width: 450px;
+	max-width: 100%;
+	margin-left: 2%;
+	padding: 26px 20px 30px;
+	-webkit-transition: 0.2s;
+	transition: 0.2s;
+}
+
+.image-drop-area.is-active {
+	background-color: #3F4069;
+}
+
+.choose-btn {
+	background-color: #007bff;
+	border: 1px solid #9E9EC4;
+	border-radius: 3px;
+	padding: 8px 15px;
+	margin-right: 8px;
+	font-size: 12px;
+	text-transform: uppercase;
+}
+
+.img-msg {
+	font-size: small;
+	font-weight: 300;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+	max-width: calc(100% - 130px);
+	vertical-align: middle;
+}
+
+.file-input {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+	opacity: 0;
+}
+
+.file-input:focus {
+	outline: none;
+}

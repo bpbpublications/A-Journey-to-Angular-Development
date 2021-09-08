@@ -1,0 +1,9 @@
+<span mouse-over-color="blue">My Span 1</span>
+<br>
+<input type="button" value="I am button" mouse-over-color="yellow">
+<hr>
+<input type="button" value="Change Authorization" (click)="Change()">
+CurrentValue:{{CurrentAuthorization}}<br>
+
+
+<input type="button" value="Add new record" *appOnlyIfUserIsAuthorized >
